@@ -11,7 +11,7 @@ def plot_dataset_distribution(csv_path, key):
     color_palette = 'muted'
 
     df = pd.read_csv(csv_path)
-    
+
     levels = {0: "NON IDC", 1: "IDC"}
 
     counts = df[key].value_counts().reset_index()
@@ -25,27 +25,30 @@ def plot_dataset_distribution(csv_path, key):
     axes.legend(handles=legend_elements, title="IDC")
 
     for i, v in enumerate(counts['count']):
-        axes.text(i, v+((counts.max()['count'])*0.01), str(v), ha='center', va='bottom')
+        axes.text(i, v+((counts.max()['count'])*0.005), str(v), ha='center', va='bottom')
 
     axes.set_xlabel("IDC")
     axes.set_ylabel("Count")
 
     fig.suptitle("Dataset Distribution")
-    
+
     plt.show()
-    
+
 
 
 def visualize_dataset(csv_path, grid_size):
 
     df = pd.read_csv(csv_path)
 
-    images_per_class = int(grid_size[0] * (grid_size[1] / 2))
+    x = int((grid_size[0])/2)
+    y = grid_size[1]
+
+    images_per_class = int(x*y)
 
     label_0_images = df[df['idc'] == 0].sample(n=images_per_class)
     label_1_images = df[df['idc'] == 1].sample(n=images_per_class)
 
-    _, axes = plt.subplots(grid_size[0], grid_size[1], figsize=(10, 10))
+    _, axes = plt.subplots((x*2), y, figsize=(10, 10))
 
     for ax in axes.flatten():
         ax.axis('off')
@@ -53,15 +56,15 @@ def visualize_dataset(csv_path, grid_size):
     for i, (_, row) in enumerate(label_0_images.iterrows()):
         img_path = f"{row['dir']}/{row['image']}"
         img = mpimg.imread(img_path)
-        axes[i//3, i%3].imshow(img)
+        axes[i//x, i%x].imshow(img)
 
     for i, (_, row) in enumerate(label_1_images.iterrows()):
         img_path = f"{row['dir']}/{row['image']}"
         img = mpimg.imread(img_path)
-        axes[i//3, i%3+3].imshow(img)
+        axes[i//x, (i%x)+x].imshow(img)
 
     axes[0, 1].set_title('NON IDC', fontsize=14)
-    axes[0, 4].set_title('IDC', fontsize=14)
+    axes[0, (x+1)].set_title('IDC', fontsize=14)
 
     plt.tight_layout()
     plt.show()

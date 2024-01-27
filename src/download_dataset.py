@@ -28,13 +28,13 @@ def unpack_dataset(dataset, destination_path):
         file_list = zip_ref.namelist()
 
         total_files = len(file_list)
-        
+
         files_extracted = 0
-        
+
         for file in file_list:
             zip_ref.extract(file, extract_to)
             files_extracted += 1
-            
+
             progress = (files_extracted / total_files) * 100
             sys.stdout.write(f"\rProgress: {progress:.2f}% ({files_extracted}/{total_files} files extracted)")
             sys.stdout.flush()
