@@ -1,3 +1,6 @@
-awscli
-boto3
+kaggle
 pandas
+scikit-image
+scikit-learn
+seaborn
+tensorflow

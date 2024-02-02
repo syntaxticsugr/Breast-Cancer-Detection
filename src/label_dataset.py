@@ -20,13 +20,13 @@ def label_dataset(dataset_dir, labels_dir, labels_filename, tt_split):
             labels_df_rows.append({"dir":dirpath, "image":filename, "idc":idc})
 
     labels_df = pd.DataFrame(data=labels_df_rows)
+    labels_df.to_csv(f'{labels_dir}/{labels_filename}.csv', index=False)
 
     if tt_split:
         train_df, test_df = train_test_split(labels_df, test_size=0.2, shuffle=True)
+        train_df.to_csv(f'{labels_dir}/{labels_filename}-train.csv', index=False)
+        test_df.to_csv(f'{labels_dir}/{labels_filename}-test.csv', index=False)
 
-    labels_df.to_csv(f'{labels_dir}/{labels_filename}.csv', index=False)
-    train_df.to_csv(f'{labels_dir}/{labels_filename}-train.csv', index=False)
-    test_df.to_csv(f'{labels_dir}/{labels_filename}-test.csv', index=False)
 
 
 

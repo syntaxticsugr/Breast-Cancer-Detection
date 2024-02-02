@@ -2,9 +2,8 @@ import os
 import time
 import pandas as pd
 from skimage import io
-from utils.image_processing.resize_image import resize_image
-from utils.image_processing.rotate_image import rotate_image
-from utils.save_image import save_image
+from concurrent.futures import ThreadPoolExecutor
+from utils.preprocessing_pipeline import preprocessing_pipeline
 
 
 
@@ -20,36 +19,31 @@ def preprocess_images(labels_csv, start_index, resize_hw, rotate_angles, output_
     items_remaining = (len(labels_csv_df)-start_index)
     print(f"\033[A\033[AProcessed: 0        Remaining: {items_remaining}        Ellapsed Time: 0        Estimated Remaining Time: --:--:--        \n")
 
-    for index in range(start_index, len(labels_csv_df)):
+    with ThreadPoolExecutor() as executor:
 
-        start_time = time.time()
+        for index in range(start_index, len(labels_csv_df)):
 
-        image_dir = labels_csv_df['dir'][index]
-        image_name = labels_csv_df['image'][index]
-        idc = labels_csv_df['idc'][index]
+            start_time = time.time()
 
-        file_name, extension = os.path.splitext(image_name)
+            image_dir = labels_csv_df['dir'][index]
+            image_name = labels_csv_df['image'][index]
+            idc = labels_csv_df['idc'][index]
 
-        try:
-            image = io.imread(f"{image_dir}/{image_name}")
+            file_name, extension = os.path.splitext(image_name)
 
-            resized_image = resize_image(image, resize_hw)
+            try:
+                image = io.imread(f"{image_dir}/{image_name}")
 
-            for angle in rotate_angles[idc]:
-                rotated_image = rotate_image(resized_image, angle)
+                executor.submit(preprocessing_pipeline, image, idc, file_name, extension, resize_hw, rotate_angles, output_dir)
 
-                new_name = f'{file_name}_{angle}{extension}'
+            except:
+                error_images.append(image_name)
 
-                save_image(rotated_image, new_name, output_dir)
+            total_time += (time.time() - start_time)
+            items_remaining -= 1
+            print(f"\033[A\033[AProcessed: {(index+1)-start_index}        Remaining: {items_remaining}        Ellapsed Time: {time.strftime('%H:%M:%S', time.gmtime(total_time))}        Estimated Remaining Time: {time.strftime('%H:%M:%S', time.gmtime((items_remaining*(total_time/((index+1)-start_index)))))}        \n")
 
-        except:
-            error_images.append(image_name)
-
-        total_time += (time.time() - start_time)
-        items_remaining -= 1
-        print(f"\033[A\033[AProcessed: {(index+1)-start_index}        Remaining: {items_remaining}        Ellapsed Time: {time.strftime('%H:%M:%S', time.gmtime(total_time))}        Estimated Remaining Time: {time.strftime('%H:%M:%S', time.gmtime((items_remaining*(total_time/((index+1)-start_index)))))}        \n")
-
-    print(error_images)
+        print(error_images)
 
 
 
