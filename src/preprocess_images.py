@@ -1,13 +1,12 @@
-import os
 import time
 import pandas as pd
 from skimage import io
 from concurrent.futures import ThreadPoolExecutor
-from utils.preprocessing_pipeline import preprocessing_pipeline
+from utils.preprocessing_pipeline import re_ro, re_ro_fh
 
 
 
-def preprocess_images(labels_csv, start_index, resize_hw, rotate_angles, output_dir):
+def preprocess_images(labels_csv, start_index, pipelines, output_dir):
 
     print("\n\n")
 
@@ -29,12 +28,10 @@ def preprocess_images(labels_csv, start_index, resize_hw, rotate_angles, output_
             image_name = labels_csv_df['image'][index]
             idc = labels_csv_df['idc'][index]
 
-            file_name, extension = os.path.splitext(image_name)
-
             try:
                 image = io.imread(f"{image_dir}/{image_name}")
 
-                executor.submit(preprocessing_pipeline, image, idc, file_name, extension, resize_hw, rotate_angles, output_dir)
+                executor.submit(pipelines[idc], image, image_name, output_dir)
 
             except:
                 error_images.append(image_name)
@@ -57,11 +54,10 @@ if __name__ == '__main__':
     # Useful In Case When Need To Resume Preprocessing From Certain Index
     start_index = 0
 
-    resize_hw = (50, 50)
-    # idc: angles
-    rotate_angles = {
-        0: [0, 180],
-        1: [0, 90, 180, 270]
+    # idc: pipeline
+    pipelines = {
+        0: re_ro,
+        1: re_ro_fh
     }
 
-    preprocess_images(labels_csv, start_index, resize_hw, rotate_angles, output_dir)
+    preprocess_images(labels_csv, start_index, pipelines, output_dir)
