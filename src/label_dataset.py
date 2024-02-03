@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 
 
 
-def label_dataset(dataset_dir, labels_dir, labels_filename, tt_split):
+def label_dataset(dataset_dir, labels_dir, labels_filename, tvt_split):
 
     create_directory(labels_dir)
 
@@ -22,21 +22,25 @@ def label_dataset(dataset_dir, labels_dir, labels_filename, tt_split):
     labels_df = pd.DataFrame(data=labels_df_rows)
     labels_df.to_csv(f'{labels_dir}/{labels_filename}.csv', index=False)
 
-    if tt_split:
-        train_df, test_df = train_test_split(labels_df, test_size=0.2, shuffle=True)
-        train_df.to_csv(f'{labels_dir}/{labels_filename}-train.csv', index=False)
-        test_df.to_csv(f'{labels_dir}/{labels_filename}-test.csv', index=False)
+    if tvt_split:
 
+        train_df, test_df = train_test_split(labels_df, test_size=0.3, shuffle=True)
+        val_df, test_df = train_test_split(test_df, test_size=0.5, shuffle=True)
+
+        train_df.to_csv(f'{labels_dir}/{labels_filename}-train.csv', index=False)
+        val_df.to_csv(f'{labels_dir}/{labels_filename}-val.csv', index=False)
+        test_df.to_csv(f'{labels_dir}/{labels_filename}-test.csv', index=False)
 
 
 
 if __name__ == "__main__":
 
     dataset_dir = r'dataset/kaggle/breast-histopathology-images/IDC_regular_ps50_idx5'
+
     labels_dir = r'src/labels'
 
     labels_filename = 'labels'
 
-    tt_split = False
+    tvt_split = False
 
-    label_dataset(dataset_dir, labels_dir, labels_filename, tt_split)
+    label_dataset(dataset_dir, labels_dir, labels_filename, tvt_split)
