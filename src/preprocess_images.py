@@ -1,8 +1,19 @@
 import time
 import pandas as pd
 from skimage import io
+from skimage.exposure import is_low_contrast
 from concurrent.futures import ThreadPoolExecutor
 from utils.preprocessing_pipeline import re_ro, re_ro_fh
+
+
+
+def check_shape(image):
+
+    if (image.shape == (50, 50, 3)):
+        return True
+
+    else:
+        False
 
 
 
@@ -31,7 +42,11 @@ def preprocess_images(labels_csv, start_index, pipelines, output_dir):
             try:
                 image = io.imread(f"{image_dir}/{image_name}")
 
-                executor.submit(pipelines[idc], image, image_name, output_dir)
+                if (check_shape(image) and (not is_low_contrast(image))):
+                    executor.submit(pipelines[idc], image, image_name, output_dir)
+
+                else:
+                    error_images.append(image_name)
 
             except:
                 error_images.append(image_name)
@@ -40,7 +55,7 @@ def preprocess_images(labels_csv, start_index, pipelines, output_dir):
             items_remaining -= 1
             print(f"\033[A\033[AProcessed: {(index+1)-start_index}        Remaining: {items_remaining}        Ellapsed Time: {time.strftime('%H:%M:%S', time.gmtime(total_time))}        Estimated Remaining Time: {time.strftime('%H:%M:%S', time.gmtime((items_remaining*(total_time/((index+1)-start_index)))))}        \n")
 
-        print(error_images)
+        print(f'{error_images}\nTotal: {len(error_images)}')
 
 
 
@@ -52,7 +67,7 @@ if __name__ == '__main__':
 
     # Start Index To PreProcess Images From
     # Useful In Case When Need To Resume Preprocessing From Certain Index
-    start_index = 0
+    start_index = 48000
 
     # idc: pipeline
     pipelines = {

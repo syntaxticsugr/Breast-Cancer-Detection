@@ -1,5 +1,6 @@
 import numpy as np
 from skimage import io
+from skimage.exposure import is_low_contrast
 from utils.create_directory import create_directory
 
 
@@ -24,4 +25,10 @@ def save_image(image, name, dir):
 
     create_directory(dir)
 
-    io.imsave(f"{dir}/{name}", (image*255).astype(np.uint8))
+    image = (image*255).astype(np.uint8)
+
+    if not is_low_contrast(image):
+        io.imsave(f"{dir}/{name}", image)
+
+    else:
+        print(f'Low Contrast Image --> {name}\n\n\n')
