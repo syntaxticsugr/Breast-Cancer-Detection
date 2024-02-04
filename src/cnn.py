@@ -73,8 +73,8 @@ if __name__ == '__main__':
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
 
-    train_labels_csv = r'src/labels/labels-v2-train.csv'
-    val_labels_csv = r'src/labels/labels-v2-val.csv'
+    train_labels_csv = r'labels/labels-v2-train.csv'
+    val_labels_csv = r'labels/labels-v2-val.csv'
 
     batch_size = 32
     epochs = 20

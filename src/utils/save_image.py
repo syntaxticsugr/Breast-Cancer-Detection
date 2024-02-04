@@ -23,12 +23,12 @@ def save_image(image, name, dir):
 
     """
 
-    create_directory(dir)
-
     image = (image*255).astype(np.uint8)
 
-    if not is_low_contrast(image):
-        io.imsave(f"{dir}/{name}", image)
+    if is_low_contrast(image):
+        dir = r'error-images'
+        print(f'Skipping Low Contrast Image --> {name}\n\n\n')
 
-    else:
-        print(f'Low Contrast Image --> {name}\n\n\n')
+    create_directory(dir)
+
+    io.imsave(f"{dir}/{name}", image, check_contrast=False)

@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 
 
 
-def label_dataset(dataset_dir, labels_dir, labels_filename, tvt_split):
+def label_dataset(labels_dir, dataset_dir, labels_filename, tvt_split):
 
     create_directory(labels_dir)
 
@@ -35,12 +35,12 @@ def label_dataset(dataset_dir, labels_dir, labels_filename, tvt_split):
 
 if __name__ == "__main__":
 
-    dataset_dir = r'dataset/kaggle/breast-histopathology-images/IDC_regular_ps50_idx5'
+    labels_dir = r'labels'
 
-    labels_dir = r'src/labels'
+    dataset_dir = r'dataset/kaggle/breast-histopathology-images/IDC_regular_ps50_idx5'
 
     labels_filename = 'labels'
 
     tvt_split = False
 
-    label_dataset(dataset_dir, labels_dir, labels_filename, tvt_split)
+    label_dataset(labels_dir, dataset_dir, labels_filename, tvt_split)

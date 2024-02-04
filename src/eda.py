@@ -12,7 +12,7 @@ def plot_dataset_distribution(csv_path, key):
 
     df = pd.read_csv(csv_path)
 
-    levels = {0: "NON IDC", 1: "IDC"}
+    levels = {0: "IDC (-)", 1: "IDC (+)"}
 
     counts = df[key].value_counts().reset_index()
     counts.sort_values(by=key, inplace=True)
@@ -63,8 +63,8 @@ def visualize_dataset(csv_path, grid_size):
         img = mpimg.imread(img_path)
         axes[i//x, (i%x)+x].imshow(img)
 
-    axes[0, 1].set_title('NON IDC', fontsize=14)
-    axes[0, (x+1)].set_title('IDC', fontsize=14)
+    axes[0, 1].set_title('IDC (-)', fontsize=14)
+    axes[0, (x+1)].set_title('IDC (+)', fontsize=14)
 
     plt.tight_layout()
     plt.show()
@@ -73,7 +73,7 @@ def visualize_dataset(csv_path, grid_size):
 
 if __name__ == '__main__':
 
-    csv_path = r'src/labels/labels.csv'
+    csv_path = r'labels/labels.csv'
     key = 'idc'
 
     plot_dataset_distribution(csv_path, key)

@@ -3,6 +3,7 @@ import pandas as pd
 from skimage import io
 from skimage.exposure import is_low_contrast
 from concurrent.futures import ThreadPoolExecutor
+from utils.save_image import save_image
 from utils.preprocessing_pipeline import re_ro, re_ro_fh
 
 
@@ -13,7 +14,7 @@ def check_shape(image):
         return True
 
     else:
-        False
+        return False
 
 
 
@@ -47,6 +48,8 @@ def preprocess_images(labels_csv, start_index, pipelines, output_dir):
 
                 else:
                     error_images.append(image_name)
+                    print(f'Skipping Low Contrast Image --> {image_name}\n\n\n')
+                    save_image(image, image_name, r'error-images')
 
             except:
                 error_images.append(image_name)
@@ -62,7 +65,7 @@ def preprocess_images(labels_csv, start_index, pipelines, output_dir):
 if __name__ == '__main__':
 
     # Required Paths
-    labels_csv = r'src/labels/labels.csv'
+    labels_csv = r'labels/labels.csv'
     output_dir = r'dataset/re-50x50-ro-4x2'
 
     # Start Index To PreProcess Images From
