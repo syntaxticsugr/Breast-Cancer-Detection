@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     # Required Paths
     labels_csv = r'labels/labels.csv'
-    output_dir = r'dataset/re-50x50-ro-4x2'
+    output_dir = r'dataset/processed-dataset'
 
     # Start Index To PreProcess Images From
     # Useful In Case When Need To Resume Preprocessing From Certain Index

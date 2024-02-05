@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     dataset_dir = r'dataset/kaggle/breast-histopathology-images/IDC_regular_ps50_idx5'
 
-    labels_filename = 'bcd-a1'
+    labels_filename = 'labels'
 
     # Weather to split the labels into train, validation and test part
     # (Boolean, (train_split, validation_split, test_split))

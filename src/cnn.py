@@ -51,8 +51,8 @@ if __name__ == '__main__':
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
 
-    train_labels_csv = r'labels/bcd-a1-v2-train.csv'
-    val_labels_csv = r'labels/bcd-a1-v2-val.csv'
+    train_labels_csv = r''
+    val_labels_csv = r''
 
     batch_size = 32
     epochs = 100
@@ -60,6 +60,6 @@ if __name__ == '__main__':
     learning_rate = 1e-4
 
     model_save_dir = r'saved-models'
-    model_name = "bcd-a1"
+    model_name = ""
 
     train_model(batch_size, epochs, warmup_epochs, learning_rate, train_labels_csv, val_labels_csv, model_save_dir, model_name)

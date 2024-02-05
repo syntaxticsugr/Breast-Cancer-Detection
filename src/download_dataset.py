@@ -43,8 +43,8 @@ def unpack_dataset(dataset, destination_path):
 
 if __name__ == "__main__":
 
-    kaggle_username = 'syntaxticsugr'
-    kaggle_key = '318e510f3d783688e53233bf81146a3c'
+    kaggle_username = ''
+    kaggle_key = ''
 
     dataset = 'paultimothymooney/breast-histopathology-images'
 
