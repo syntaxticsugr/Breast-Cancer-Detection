@@ -1,8 +1,10 @@
+import os
+import shutil
 import pandas as pd
 import tensorflow as tf
-# from keras.optimizers.schedules import CosineDecay
+from keras.optimizers.schedules import CosineDecay
 from utils.lr_scheduler import CosineDecayWithWarmup
-from keras.callbacks import EarlyStopping, CSVLogger
+from keras.callbacks import EarlyStopping, CSVLogger, LearningRateScheduler
 from utils.create_directory import create_directory
 from utils.prepare_dataset import prepare_dataset
 from utils.bcd_models import get_model
@@ -25,12 +27,14 @@ def get_callbacks(model_save_dir, model_name, epochs, warmup_epochs, learning_ra
 
 
 
-def train_model(batch_size, epochs, warmup_epochs, learning_rate, train_labels_csv, val_labels_csv, model_save_dir, model_name):
+def train_model(batch_size, epochs, warmup_epochs, learning_rate, tvt_labels_dir, model_save_dir, model_name):
 
     create_directory(f'{model_save_dir}/{model_name}')
 
-    train_df = pd.read_csv(train_labels_csv)
-    val_df = pd.read_csv(val_labels_csv)
+    labels_name = f'{os.path.basename(tvt_labels_dir)}'
+
+    train_df = pd.read_csv(f'{tvt_labels_dir}/{labels_name}-train.csv')
+    val_df = pd.read_csv(f'{tvt_labels_dir}/{labels_name}-val.csv')
 
     train_ds = prepare_dataset(train_df, batch_size)
     val_ds = prepare_dataset(val_df, batch_size)
@@ -43,6 +47,8 @@ def train_model(batch_size, epochs, warmup_epochs, learning_rate, train_labels_c
 
     model.save(f'{model_save_dir}/{model_name}/{model_name}.keras')
 
+    shutil.copytree(tvt_labels_dir, f'{model_save_dir}/{model_name}')
+
 
 
 if __name__ == '__main__':
@@ -51,15 +57,14 @@ if __name__ == '__main__':
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
 
-    train_labels_csv = r''
-    val_labels_csv = r''
+    tvt_labels_dir = r'labels/labels-v2'
 
     batch_size = 32
     epochs = 100
-    warmup_epochs = 10
+    warmup_epochs = 25
     learning_rate = 1e-4
 
     model_save_dir = r'saved-models'
-    model_name = ""
+    model_name = "bcd-final"
 
-    train_model(batch_size, epochs, warmup_epochs, learning_rate, train_labels_csv, val_labels_csv, model_save_dir, model_name)
+    train_model(batch_size, epochs, warmup_epochs, learning_rate, tvt_labels_dir, model_save_dir, model_name)

@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     # Start Index To PreProcess Images From
     # Useful In Case When Need To Resume Preprocessing From Certain Index
-    start_index = 48000
+    start_index = 0
 
     # idc: pipeline
     pipelines = {

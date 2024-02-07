@@ -5,6 +5,7 @@ from keras.callbacks import LearningRateScheduler
 
 
 class CosineDecayWithWarmup(LearningRateScheduler):
+
     def __init__(self, learning_rate_base, total_epochs, warmup_epochs, verbose=0):
         super(CosineDecayWithWarmup, self).__init__(self.lr_schedule, verbose)
         self.learning_rate_base = learning_rate_base
