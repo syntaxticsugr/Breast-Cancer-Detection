@@ -21,7 +21,7 @@ def plot_dataset_distribution(csv_path, key):
     sns.barplot(x=counts[key], y=counts['count'], palette=color_palette, hue=counts[key], ax=axes)
 
     legend_elements = [Patch(color=sns.color_palette(color_palette)[i], label=f"{level} : {levels[level]}")
-                       for i, level in enumerate(counts[key])]
+                        for i, level in enumerate(counts[key])]
     axes.legend(handles=legend_elements, title="IDC")
 
     for i, v in enumerate(counts['count']):
