@@ -1,20 +1,21 @@
 import pandas as pd
 import tensorflow as tf
-from keras.callbacks import EarlyStopping, CSVLogger, ReduceLROnPlateau
+from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from utils.create_directory import create_directory
 from utils.prepare_dataset import prepare_dataset
 from utils.bcd_models import get_model
+from utils.custom_callbacks import CustomCSVLogger
 
 
 
 def get_callbacks(model_save_dir, model_name):
 
-    early_stopping = EarlyStopping(patience=10, restore_best_weights=True, verbose=1)
+    early_stopping = EarlyStopping(monitor='val_accuracy', patience=10, restore_best_weights=True, verbose=1)
 
     log_csv = f'{model_save_dir}/{model_name}/{model_name}-fit-log.csv'
-    csv_logger = CSVLogger(log_csv, separator=",", append=False)
+    csv_logger = CustomCSVLogger(log_csv, separator=",", append=False)
 
-    scheduler = ReduceLROnPlateau(factor=0.1, patience=5, verbose=1)
+    scheduler = ReduceLROnPlateau(monitor='val_accuracy', patience=5, factor=1e-1, min_lr=1e-6, verbose=1)
 
     return [early_stopping, csv_logger, scheduler]
 
