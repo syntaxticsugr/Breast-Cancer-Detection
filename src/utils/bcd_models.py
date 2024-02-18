@@ -1,13 +1,24 @@
 from keras import Sequential
 from keras.layers import BatchNormalization, Conv2D, Dense, Dropout, Flatten, MaxPooling2D
-from keras.metrics import Accuracy
 from keras.src.optimizers.adam import Adam
+from keras.utils import plot_model
 
 
 
-def get_model(learning_rate):
+def get_model(learning_rate, model_save_dir, model_name):
 
-    return simp(learning_rate)
+    model = simp(learning_rate)
+
+    plot_model(model,
+               to_file = f'{model_save_dir}/{model_name}/{model_name}.png',
+               show_shapes = True,
+               show_dtype= True,
+               show_layer_names = True,
+               show_layer_activations= True,
+               show_trainable= True,
+               expand_nested = False)
+
+    return model
 
 
 
@@ -40,6 +51,6 @@ def simp(learning_rate):
         ]
     )
 
-    model.compile(optimizer=Adam(learning_rate), loss='sparse_categorical_crossentropy', metrics=[Accuracy()])
+    model.compile(optimizer=Adam(learning_rate), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     return model
