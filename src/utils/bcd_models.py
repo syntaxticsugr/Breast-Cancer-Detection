@@ -1,44 +1,13 @@
 from keras import Sequential
-from keras.models import Model
-from keras.regularizers import l2
-from keras.src.optimizers.adam import Adam
-from keras.applications.efficientnet_v2 import EfficientNetV2S
 from keras.layers import BatchNormalization, Conv2D, Dense, Dropout, Flatten, MaxPooling2D
+from keras.metrics import Accuracy
+from keras.src.optimizers.adam import Adam
 
 
 
 def get_model(learning_rate):
 
-    # return env2s(learning_rate)
     return simp(learning_rate)
-
-
-
-def env2s(learning_rate):
-
-    base_model = EfficientNetV2S(
-        include_top=False,
-        weights='imagenet',
-        input_shape=(50, 50, 3),
-        pooling='max'
-    )
-
-    for layer in base_model.layers:
-        layer.trainable = True
-
-    x = base_model.output
-    x = BatchNormalization()(x)
-    x = Dense(256, activation='relu', kernel_regularizer=l2(6e-3))(x)
-    x = Dropout(0.5)(x)
-
-    inputs = base_model.input
-    predictions = Dense(2, activation='softmax')(x)
-
-    model = Model(inputs=inputs, outputs=predictions)
-
-    model.compile(optimizer=Adam(learning_rate), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
-    return model
 
 
 
@@ -71,6 +40,6 @@ def simp(learning_rate):
         ]
     )
 
-    model.compile(optimizer=Adam(learning_rate), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=Adam(learning_rate), loss='sparse_categorical_crossentropy', metrics=[Accuracy()])
 
     return model

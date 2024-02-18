@@ -1,10 +1,10 @@
+from keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from utils.bcd_models import get_model
+from utils.create_directory import create_directory
+from utils.custom_callbacks import CustomCSVLogger
+from utils.prepare_dataset import prepare_dataset
 import pandas as pd
 import tensorflow as tf
-from keras.callbacks import EarlyStopping, ReduceLROnPlateau
-from utils.create_directory import create_directory
-from utils.prepare_dataset import prepare_dataset
-from utils.bcd_models import get_model
-from utils.custom_callbacks import CustomCSVLogger
 
 
 
@@ -36,6 +36,8 @@ def train_model(batch_size, epochs, learning_rate, train_csv, val_csv, model_sav
     model = get_model(learning_rate)
 
     model.fit(x=train_ds, validation_data=val_ds, epochs=epochs, callbacks=callbacks, verbose=1)
+
+    print("Saving Model...")
 
     model.save(f'{model_save_dir}/{model_name}/{model_name}.keras')
 

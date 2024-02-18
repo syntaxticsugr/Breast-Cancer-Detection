@@ -1,7 +1,7 @@
+from sklearn.model_selection import train_test_split
+from utils.create_directory import create_directory
 import os
 import pandas as pd
-from utils.create_directory import create_directory
-from sklearn.model_selection import train_test_split
 
 
 

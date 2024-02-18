@@ -1,18 +1,16 @@
-import time
-import pandas as pd
+from concurrent.futures import ThreadPoolExecutor
 from skimage import io
 from skimage.exposure import is_low_contrast
-from concurrent.futures import ThreadPoolExecutor
+from utils.preprocessing_pipelines import ro, ro_fh
 from utils.save_image import save_image
-from utils.preprocessing_pipeline import re_ro, re_ro_fh
+import pandas as pd
+import time
 
 
 
 def check_shape(image):
-
     if (image.shape == (50, 50, 3)):
         return True
-
     else:
         return False
 
@@ -48,7 +46,7 @@ def preprocess_images(labels_csv, start_index, pipelines, output_dir):
 
                 else:
                     error_images.append(image_name)
-                    print(f'Skipping Low Contrast Image --> {image_name}\n\n\n')
+                    print(f'Skipping Image --> {image_name}\n\n\n')
                     save_image(image, image_name, r'error-images')
 
             except:
@@ -74,8 +72,8 @@ if __name__ == '__main__':
 
     # idc: pipeline
     pipelines = {
-        0: re_ro,
-        1: re_ro_fh
+        0: ro,
+        1: ro_fh
     }
 
     preprocess_images(labels_csv, start_index, pipelines, output_dir)

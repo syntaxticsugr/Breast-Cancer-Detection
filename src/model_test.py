@@ -1,7 +1,7 @@
-import numpy as np
-import pandas as pd
 from keras.saving import load_model
 from utils.prepare_dataset import prepare_dataset
+import numpy as np
+import pandas as pd
 
 
 
@@ -34,7 +34,7 @@ def test_model(model_save_dir, model_name, batch_size, test_csv):
 if __name__ == '__main__':
 
     model_save_dir = r'saved-models'
-    model_name = 'bcd-final'
+    model_name = "bcd-final"
 
     test_csv = r'labels/labels-v2/labels-v2-test.csv'
 

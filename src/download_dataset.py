@@ -18,7 +18,7 @@ def download_dataset(kaggle_username, kaggle_key, dataset, destination_path):
 
 
 
-def unpack_dataset(dataset, destination_path):
+def unzip_dataset(dataset, destination_path):
 
     archive = f'{destination_path}/{os.path.basename(dataset)}.zip'
     extract_to = f'{destination_path}/{os.path.basename(dataset)}'
@@ -52,4 +52,4 @@ if __name__ == "__main__":
 
     download_dataset(kaggle_username, kaggle_key, dataset, destination_path)
 
-    unpack_dataset(dataset, destination_path)
+    unzip_dataset(dataset, destination_path)

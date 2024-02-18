@@ -1,13 +1,20 @@
+from sklearn.metrics import classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
-from sklearn.metrics import classification_report, confusion_matrix
 
 
 
 def plot_confusion_matrix(conf_matrix):
 
-    ax = sns.heatmap(conf_matrix, annot=True, fmt='g', cmap='Blues',
+    group_names = ['TN','FP','FN','TP']
+    group_counts = ['{0:0.0f}'.format(value) for value in conf_matrix.flatten()]
+    group_percentages = ['{0:.2%}'.format(value) for value in conf_matrix.flatten()/np.sum(conf_matrix)]
+    labels = [f'{n} - {p}\n\n{c}' for n, c, p in zip(group_names, group_counts, group_percentages)]
+    labels = np.asarray(labels).reshape(2,2)
+
+    ax = sns.heatmap(conf_matrix, annot=labels, fmt='', cmap='Blues',
                         xticklabels=['IDC (-)', 'IDC (+)'],
                         yticklabels=['IDC (-)', 'IDC (+)'])
 
@@ -17,6 +24,7 @@ def plot_confusion_matrix(conf_matrix):
     plt.xlabel('Predicted Label')
     plt.ylabel('True Label')
     plt.title('Confusion Matrix', y=-0.1)
+
     plt.show()
 
 

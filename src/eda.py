@@ -1,8 +1,8 @@
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
 
 
@@ -74,6 +74,8 @@ def visualize_dataset(csv_path, grid_size):
 if __name__ == '__main__':
 
     csv_path = r'labels/labels.csv'
+    # csv_path = r'labels/labels-v2/labels-v2.csv'
+
     key = 'idc'
 
     plot_dataset_distribution(csv_path, key)
