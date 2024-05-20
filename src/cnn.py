@@ -28,7 +28,7 @@ def train_model(batch_size, epochs, learning_rate, tvt_labels, model_save_dir, m
     create_directory(f'{model_save_dir}/{model_name}')
 
     common_name = os.path.basename(tvt_labels)
-    
+
     train_df = pd.read_csv(f'{tvt_labels}/{common_name}-train.csv')
     val_df = pd.read_csv(f'{tvt_labels}/{common_name}-val.csv')
 
@@ -58,10 +58,10 @@ if __name__ == '__main__':
     tvt_labels = r'labels/labels-v2'
 
     batch_size = 32
-    epochs = 50
+    epochs = 100
     learning_rate = 1e-2
 
     model_save_dir = r'saved-models'
-    model_name = "bcd-a"
+    model_name = "bcd-final"
 
     train_model(batch_size, epochs, learning_rate, tvt_labels, model_save_dir, model_name)
